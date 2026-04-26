@@ -70,15 +70,15 @@
             <section class="room-grid" th:unless="${#lists.isEmpty(rooms)}">
                 <article class="card room-card" th:each="room : ${rooms}">
                     <div class="card-top">
-                        <div>
-                            <div class="room-meta-line">
-                                <span class="badge secondary" th:text="${room.roomType != null ? room.roomType.label : '공간'}">미팅룸</span>
-                                <span class="muted" th:text="${room.region}">역삼·선릉</span>
-                            </div>
+                        <div class="room-card-main">
+                            <span class="badge secondary room-type-badge" th:text="${room.roomType != null ? room.roomType.label : '공간'}">미팅룸</span>
                             <h2 th:text="${room.name}">Ocean</h2>
-                            <p class="muted" th:text="${room.location}">8F A구역</p>
+                            <span class="room-location-text" th:text="${room.location}">8F A구역</span>
                         </div>
-                        <span class="badge" th:text="'정원 ' + ${room.capacity} + '명'">정원 8명</span>
+                        <div class="room-card-side">
+                            <span class="badge room-capacity-badge" th:text="'정원 ' + ${room.capacity} + '명'">정원 8명</span>
+                            <span class="room-region-chip" th:text="${room.region}">역삼·선릉</span>
+                        </div>
                     </div>
                     <p th:text="${room.description}">설명</p>
                     <a class="button" th:href="@{/rooms/{id}(id=${room.id})}">예약하기</a>
