@@ -16,7 +16,8 @@ a {
 
 button,
 input,
-textarea {
+textarea,
+select {
     font: inherit;
 }
 
@@ -34,11 +35,40 @@ textarea {
 .page-header {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 40px 24px 24px;
+    padding: 32px 24px 24px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
+}
+
+.site-bar {
+    border-bottom: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.site-bar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.site-brand {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #4b5563;
+    font-weight: 600;
 }
 
 .page-header.compact {
@@ -67,10 +97,16 @@ textarea {
     align-items: center;
 }
 
+.discovery-layout,
 .room-grid,
 .admin-layout {
     display: grid;
     gap: 20px;
+}
+
+.discovery-layout {
+    grid-template-columns: 320px minmax(0, 1fr);
+    align-items: start;
 }
 
 .room-grid {
@@ -107,24 +143,204 @@ textarea {
     gap: 16px;
 }
 
+.results-section,
+.filter-form,
+.filter-group,
+.slot-picker,
+.room-list,
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.results-section,
+.filter-form {
+    gap: 24px;
+}
+
+.filter-group,
+.slot-picker,
+.room-list,
+.schedule-list {
+    gap: 12px;
+}
+
+.filter-card h2,
+.results-header h2,
+.slot-title {
+    margin: 0;
+}
+
 .card-top,
 .mini-card,
-.reservation-row {
+.reservation-row,
+.filter-header,
+.filter-title-line,
+.room-meta-line {
     display: flex;
     justify-content: space-between;
     gap: 16px;
 }
 
-.mini-card {
-    padding: 16px;
+.mini-card,
+.filter-title-line,
+.room-meta-line {
     align-items: center;
 }
 
-.room-list,
-.schedule-list {
+.mini-card {
+    padding: 16px;
+}
+
+.check-option,
+.chip-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.check-option {
+    color: #4b5563;
+}
+
+.check-option input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+.chip-list {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip-option input {
+    display: none;
+}
+
+.chip-option span {
+    border: 1px solid #d7dfeb;
+    border-radius: 999px;
+    padding: 10px 16px;
+    color: #4b5563;
+    background: #ffffff;
+}
+
+.chip-option input:checked + span {
+    border-color: #2563eb;
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.range-dual {
+    position: relative;
+    height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+.range-dual-track {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    top: 50%;
+    height: 6px;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: #e5e7eb;
+}
+
+.range-dual-active {
+    position: absolute;
+    top: 50%;
+    height: 6px;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: #1f2937;
+}
+
+.range-dual input[type="range"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 56px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: none;
+}
+
+.range-dual input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+    pointer-events: auto;
+    cursor: pointer;
+    margin-top: -11px;
+}
+
+.range-dual input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+}
+
+.range-dual input[type="range"]::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.range-dual input[type="range"]::-moz-range-track {
+    height: 6px;
+    background: transparent;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-link {
+    min-width: 40px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid #d7dfeb;
+    text-align: center;
+    background: #ffffff;
+    color: #4b5563;
+}
+
+.page-link.active {
+    background: #1f2937;
+    border-color: #1f2937;
+    color: #ffffff;
+}
+
+.page-link.disabled {
+    pointer-events: none;
+    opacity: 0.45;
 }
 
 .schedule-item {
@@ -180,8 +396,8 @@ textarea {
 }
 
 .badge.secondary {
-    background: #fee2e2;
-    color: #b91c1c;
+    background: #eef2ff;
+    color: #4338ca;
 }
 
 .form-grid {
@@ -206,7 +422,8 @@ textarea {
 }
 
 input,
-textarea {
+textarea,
+select {
     width: 100%;
     padding: 12px 14px;
     border: 1px solid #cbd5e1;
@@ -216,6 +433,58 @@ textarea {
 
 .field-error {
     color: #dc2626;
+}
+
+.slot-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slot-subtitle {
+    margin: 0;
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.slot-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.slot-chip {
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 1px solid #d7dfeb;
+    background: #ffffff;
+    color: #4b5563;
+    cursor: pointer;
+}
+
+.slot-chip.selected {
+    background: #eff6ff;
+    border-color: #2563eb;
+    color: #1d4ed8;
+}
+
+.slot-chip:disabled {
+    cursor: not-allowed;
+    background: #f8fafc;
+    color: #c0c7d4;
+}
+
+.slot-summary {
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #4b5563;
+}
+
+.helper-text {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
 }
 
 .alert {
@@ -273,7 +542,8 @@ textarea {
 @media (max-width: 900px) {
     .split-layout,
     .admin-layout,
-    .form-grid {
+    .form-grid,
+    .discovery-layout {
         grid-template-columns: 1fr;
     }
 
@@ -281,7 +551,12 @@ textarea {
     .reservation-row,
     .mini-card,
     .card-top,
-    .inline-form {
+    .inline-form,
+    .filter-header,
+    .filter-title-line,
+    .results-header,
+    .site-bar-inner,
+    .site-nav {
         flex-direction: column;
     }
 

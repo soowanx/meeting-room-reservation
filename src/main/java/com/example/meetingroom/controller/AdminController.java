@@ -1,6 +1,7 @@
 package com.example.meetingroom.controller;
 
 import com.example.meetingroom.config.AdminInterceptor;
+import com.example.meetingroom.domain.RoomType;
 import com.example.meetingroom.dto.AdminLoginForm;
 import com.example.meetingroom.dto.RoomForm;
 import com.example.meetingroom.exception.BusinessException;
@@ -66,8 +67,7 @@ public class AdminController {
 
     @GetMapping("/admin/dashboard")
     public String dashboard(@ModelAttribute("roomForm") RoomForm roomForm, Model model) {
-        model.addAttribute("rooms", roomService.getAllRooms());
-        model.addAttribute("reservations", reservationService.getAllReservations());
+        populateDashboard(model);
         return "admin-dashboard";
     }
 
@@ -79,8 +79,7 @@ public class AdminController {
             RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("rooms", roomService.getAllRooms());
-            model.addAttribute("reservations", reservationService.getAllReservations());
+            populateDashboard(model);
             return "admin-dashboard";
         }
         try {
@@ -90,6 +89,17 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/admin/dashboard";
+    }
+
+    @ModelAttribute("roomTypes")
+    public RoomType[] roomTypes() {
+        return RoomType.values();
+    }
+
+    private void populateDashboard(Model model) {
+        model.addAttribute("rooms", roomService.getAllRooms());
+        model.addAttribute("reservations", reservationService.getAllReservations());
+        model.addAttribute("regions", roomService.getRegions());
     }
 
     @PostMapping("/admin/rooms/{roomId}/toggle")

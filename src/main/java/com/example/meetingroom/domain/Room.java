@@ -2,6 +2,8 @@ package com.example.meetingroom.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,6 +33,13 @@ public class Room {
 
     @Column(nullable = false, length = 500)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "room_type")
+    private RoomType roomType;
+
+    @Column(name = "region")
+    private String region;
 
     @Column(nullable = false)
     private boolean active = true;
@@ -73,6 +82,22 @@ public class Room {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public boolean isActive() {

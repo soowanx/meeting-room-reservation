@@ -5,8 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${room.name} + ' 예약'">회의실 예약</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:inline="javascript">
+        window.roomReservationConfig = {
+            existingReservations: /*[[${reservationSchedules}]]*/ [],
+            initialStartAt: /*[[${initialStartAt}]]*/ null,
+            initialEndAt: /*[[${initialEndAt}]]*/ null
+        };
+    </script>
+    <script defer th:src="@{/js/reservation-form.js}"></script>
 </head>
 <body>
+<div th:replace="~{fragments/site-header :: siteHeader}"></div>
 <header class="page-header compact">
     <div>
         <a class="text-link" th:href="@{/}">← 회의실 목록</a>
@@ -37,17 +46,31 @@
                 <small class="field-error" th:if="${#fields.hasErrors('reserverEmail')}" th:errors="*{reserverEmail}"></small>
             </label>
 
-            <label>
-                시작 시간
-                <input type="datetime-local" th:field="*{startAt}">
-                <small class="field-error" th:if="${#fields.hasErrors('startAt')}" th:errors="*{startAt}"></small>
+            <label class="full-width">
+                이용 일자
+                <input type="date" data-reservation-date>
             </label>
 
-            <label>
-                종료 시간
-                <input type="datetime-local" th:field="*{endAt}">
+            <div class="full-width slot-picker">
+                <div class="slot-group">
+                    <div class="slot-title">이용시간</div>
+                    <div class="slot-subtitle">시작시간</div>
+                    <div class="slot-list" data-start-slot-list></div>
+                </div>
+
+                <div class="slot-group">
+                    <div class="slot-subtitle">종료시간</div>
+                    <div class="slot-list" data-end-slot-list></div>
+                </div>
+
+                <div class="slot-summary" data-slot-summary>날짜와 시간을 선택해주세요.</div>
+                <p class="helper-text">30분 단위로 선택할 수 있습니다.</p>
+
+                <input type="hidden" th:field="*{startAt}" data-start-at>
+                <input type="hidden" th:field="*{endAt}" data-end-at>
+                <small class="field-error" th:if="${#fields.hasErrors('startAt')}" th:errors="*{startAt}"></small>
                 <small class="field-error" th:if="${#fields.hasErrors('endAt')}" th:errors="*{endAt}"></small>
-            </label>
+            </div>
 
             <label class="full-width">
                 사용 목적
@@ -68,8 +91,7 @@
         <div class="schedule-list" th:unless="${#lists.isEmpty(upcomingReservations)}">
             <article class="schedule-item" th:each="reservation : ${upcomingReservations}">
                 <div>
-                    <strong th:text="${reservation.purpose}">주간 회의</strong>
-                    <p class="muted" th:text="${reservation.reserverName} + ' · ' + ${reservation.reserverEmail}">예약자</p>
+                    <strong>예약됨</strong>
                 </div>
                 <p th:text="${#temporals.format(reservation.startAt, 'yyyy-MM-dd HH:mm')} + ' - ' + ${#temporals.format(reservation.endAt, 'HH:mm')}">시간</p>
             </article>

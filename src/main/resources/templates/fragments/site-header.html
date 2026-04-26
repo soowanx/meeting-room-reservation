@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="siteHeader" class="site-bar">
+    <div class="site-bar-inner">
+        <a class="site-brand" th:href="@{/}">SpaceFlow</a>
+        <nav class="site-nav">
+            <a th:href="@{/}">공간예약</a>
+            <a th:href="@{/reservations/my}">내 예약</a>
+            <a th:href="@{/admin/login}">로그인</a>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

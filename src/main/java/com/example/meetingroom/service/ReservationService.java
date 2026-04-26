@@ -40,12 +40,18 @@ public class ReservationService {
 
     @Transactional
     public Reservation createReservation(Long roomId, ReservationCreateForm form) {
-        Room room = roomService.getRoom(roomId);
+        Room room = roomService.getRoomForUpdate(roomId);
         if (!room.isActive()) {
             throw new BusinessException("현재 예약할 수 없는 회의실입니다.");
         }
+        if (!isHalfHourUnit(form.getStartAt()) || !isHalfHourUnit(form.getEndAt())) {
+            throw new BusinessException("예약 시간은 30분 단위로만 선택할 수 있습니다.");
+        }
         if (!form.getEndAt().isAfter(form.getStartAt())) {
             throw new BusinessException("종료 시간은 시작 시간보다 늦어야 합니다.");
+        }
+        if (form.getStartAt().plusMinutes(30).isAfter(form.getEndAt())) {
+            throw new BusinessException("최소 예약 시간은 30분입니다.");
         }
 
         List<Reservation> overlaps = reservationRepository.findOverlappingReservations(
@@ -93,5 +99,9 @@ public class ReservationService {
     private Reservation getReservation(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new BusinessException("존재하지 않는 예약입니다."));
+    }
+
+    private boolean isHalfHourUnit(LocalDateTime dateTime) {
+        return dateTime.getMinute() == 0 || dateTime.getMinute() == 30;
     }
 }

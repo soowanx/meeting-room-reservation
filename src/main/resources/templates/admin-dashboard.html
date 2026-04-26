@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div th:replace="~{fragments/site-header :: siteHeader}"></div>
 <header class="page-header compact">
     <div>
         <a class="text-link" th:href="@{/}">← 홈으로</a>
@@ -41,6 +42,22 @@
                 <input type="number" th:field="*{capacity}" min="1">
                 <small class="field-error" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></small>
             </label>
+            <label>
+                공간 유형
+                <select th:field="*{roomType}">
+                    <option value="">선택하세요</option>
+                    <option th:each="type : ${roomTypes}" th:value="${type}" th:text="${type.label}">미팅룸</option>
+                </select>
+                <small class="field-error" th:if="${#fields.hasErrors('roomType')}" th:errors="*{roomType}"></small>
+            </label>
+            <label class="full-width">
+                지역
+                <input type="text" th:field="*{region}" list="region-options" placeholder="예: 역삼·선릉">
+                <datalist id="region-options">
+                    <option th:each="region : ${regions}" th:value="${region}">역삼·선릉</option>
+                </datalist>
+                <small class="field-error" th:if="${#fields.hasErrors('region')}" th:errors="*{region}"></small>
+            </label>
             <label class="full-width">
                 설명
                 <textarea th:field="*{description}" rows="3" placeholder="회의실 특징을 입력하세요."></textarea>
@@ -57,6 +74,7 @@
                 <div>
                     <strong th:text="${room.name}">Ocean</strong>
                     <p class="muted" th:text="${room.location} + ' · 정원 ' + ${room.capacity} + '명'">정보</p>
+                    <p class="muted" th:text="${(room.roomType != null ? room.roomType.label : '공간') + ' · ' + room.region}">유형</p>
                 </div>
                 <form th:action="@{/admin/rooms/{id}/toggle(id=${room.id})}" method="post">
                     <button class="button small" th:classappend="${room.active} ? ' secondary' : ''" type="submit"

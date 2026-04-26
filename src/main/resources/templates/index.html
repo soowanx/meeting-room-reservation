@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회의실 예약 관리</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/filter-form.js}"></script>
 </head>
 <body>
+<div th:replace="~{fragments/site-header :: siteHeader}"></div>
 <header class="page-header">
     <div>
         <p class="eyebrow">Meeting Room Reservation</p>
@@ -20,18 +22,95 @@
 </header>
 
 <main class="container">
-    <section class="room-grid">
-        <article class="card room-card" th:each="room : ${rooms}">
-            <div class="card-top">
-                <div>
-                    <h2 th:text="${room.name}">Ocean</h2>
-                    <p class="muted" th:text="${room.location}">8F A구역</p>
+    <section class="discovery-layout">
+        <aside class="card filter-card">
+            <form method="get" th:action="@{/}" class="filter-form">
+                <div class="filter-header">
+                    <h2>필터</h2>
+                    <a class="text-link" th:href="@{/}">초기화</a>
                 </div>
-                <span class="badge" th:text="'정원 ' + ${room.capacity} + '명'">정원 8명</span>
+
+                <div class="filter-group">
+                    <h3>공간유형</h3>
+                    <label class="check-option" th:each="type : ${roomTypes}">
+                        <input type="checkbox" name="roomTypes" th:value="${type.name()}"
+                               th:checked="${selectedRoomTypes.contains(type)}">
+                        <span th:text="${type.label}">미팅룸</span>
+                    </label>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title-line">
+                        <h3>인원</h3>
+                        <strong><span data-min-capacity-label th:text="${minCapacity}">1</span>명~<span data-max-capacity-label th:text="${maxCapacity}">80</span>명</strong>
+                    </div>
+                    <div class="range-dual">
+                        <div class="range-dual-track"></div>
+                        <div class="range-dual-active" data-range-active></div>
+                        <input type="range" name="minCapacity" min="1" max="80" step="1" th:value="${minCapacity}" data-min-capacity>
+                        <input type="range" name="maxCapacity" min="1" max="80" step="1" th:value="${maxCapacity}" data-max-capacity>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3>지역</h3>
+                    <div class="chip-list">
+                        <label class="chip-option" th:each="region : ${regions}">
+                            <input type="checkbox" name="regions" th:value="${region}"
+                                   th:checked="${selectedRegions.contains(region)}">
+                            <span th:text="${region}">강남·신논현</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="button full-width" type="submit">필터 적용</button>
+            </form>
+        </aside>
+
+        <section class="results-section">
+            <div class="results-header">
+                <div>
+                    <h2>예약 가능한 회의실</h2>
+                    <p class="muted" th:text="${totalRooms} + '개 공간 · 페이지 ' + ${currentPage} + '/' + ${totalPages}">3개 공간</p>
+                </div>
             </div>
-            <p th:text="${room.description}">설명</p>
-            <a class="button" th:href="@{/rooms/{id}(id=${room.id})}">예약하기</a>
-        </article>
+
+            <div th:if="${#lists.isEmpty(rooms)}" class="card empty-state">
+                선택한 조건에 맞는 회의실이 없습니다.
+            </div>
+
+            <section class="room-grid" th:unless="${#lists.isEmpty(rooms)}">
+                <article class="card room-card" th:each="room : ${rooms}">
+                    <div class="card-top">
+                        <div>
+                            <div class="room-meta-line">
+                                <span class="badge secondary" th:text="${room.roomType != null ? room.roomType.label : '공간'}">미팅룸</span>
+                                <span class="muted" th:text="${room.region}">역삼·선릉</span>
+                            </div>
+                            <h2 th:text="${room.name}">Ocean</h2>
+                            <p class="muted" th:text="${room.location}">8F A구역</p>
+                        </div>
+                        <span class="badge" th:text="'정원 ' + ${room.capacity} + '명'">정원 8명</span>
+                    </div>
+                    <p th:text="${room.description}">설명</p>
+                    <a class="button" th:href="@{/rooms/{id}(id=${room.id})}">예약하기</a>
+                </article>
+            </section>
+
+            <nav class="pagination" th:if="${totalPages > 1}">
+                <a class="page-link"
+                   th:classappend="${currentPage == 1} ? ' disabled' : ''"
+                   th:href="${currentPage > 1 ? pageUrls.get(currentPage - 1) : '#'}">이전</a>
+                <a class="page-link"
+                   th:each="pageNumber : ${pageNumbers}"
+                   th:classappend="${pageNumber == currentPage} ? ' active' : ''"
+                   th:href="${pageUrls.get(pageNumber)}"
+                   th:text="${pageNumber}">1</a>
+                <a class="page-link"
+                   th:classappend="${currentPage == totalPages} ? ' disabled' : ''"
+                   th:href="${currentPage < totalPages ? pageUrls.get(currentPage + 1) : '#'}">다음</a>
+            </nav>
+        </section>
     </section>
 </main>
 </body>

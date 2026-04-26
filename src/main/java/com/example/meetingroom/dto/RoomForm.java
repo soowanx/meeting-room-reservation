@@ -1,7 +1,9 @@
 package com.example.meetingroom.dto;
 
+import com.example.meetingroom.domain.RoomType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class RoomForm {
 
@@ -16,6 +18,12 @@ public class RoomForm {
 
     @NotBlank(message = "설명을 입력해주세요.")
     private String description;
+
+    @NotNull(message = "공간 유형을 선택해주세요.")
+    private RoomType roomType;
+
+    @NotBlank(message = "지역을 입력해주세요.")
+    private String region;
 
     public String getName() {
         return name;
@@ -47,5 +55,21 @@ public class RoomForm {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }
