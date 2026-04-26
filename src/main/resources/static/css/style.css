@@ -1,0 +1,300 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f6fb;
+    color: #1f2937;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+}
+
+.container.narrow {
+    max-width: 520px;
+    padding-top: 48px;
+}
+
+.page-header {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.page-header.compact {
+    padding-bottom: 12px;
+}
+
+.page-header h1 {
+    margin: 6px 0 10px;
+    font-size: 36px;
+}
+
+.eyebrow {
+    margin: 0;
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.subtitle,
+.muted {
+    color: #6b7280;
+}
+
+.header-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.room-grid,
+.admin-layout {
+    display: grid;
+    gap: 20px;
+}
+
+.room-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.admin-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.split-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 20px;
+}
+
+.card,
+.room-card,
+.mini-card {
+    background: #ffffff;
+    border: 1px solid #dbe3ee;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.card,
+.room-card {
+    padding: 24px;
+}
+
+.room-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-top,
+.mini-card,
+.reservation-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.mini-card {
+    padding: 16px;
+    align-items: center;
+}
+
+.room-list,
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.schedule-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.schedule-item:last-child {
+    border-bottom: none;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.button.secondary {
+    background: #e5eefc;
+    color: #1d4ed8;
+}
+
+.button.danger {
+    background: #dc2626;
+}
+
+.button.small {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.text-link {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.badge.secondary {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.form-grid label,
+.inline-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inline-form {
+    flex-direction: row;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.field-error {
+    color: #dc2626;
+}
+
+.alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.alert.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.alert.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.empty-state {
+    padding: 24px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    color: #6b7280;
+    text-align: center;
+}
+
+.reservation-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.reservation-row {
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.reservation-row.header {
+    font-weight: 700;
+    color: #374151;
+}
+
+.reservation-row > span {
+    flex: 1;
+}
+
+.reservation-row.admin > span:nth-child(2) {
+    flex: 1.4;
+}
+
+.login-card {
+    margin-top: 40px;
+}
+
+@media (max-width: 900px) {
+    .split-layout,
+    .admin-layout,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header,
+    .reservation-row,
+    .mini-card,
+    .card-top,
+    .inline-form {
+        flex-direction: column;
+    }
+
+    .reservation-row.header {
+        display: none;
+    }
+
+    .reservation-row {
+        padding: 16px 0;
+        align-items: flex-start;
+    }
+
+    .reservation-row > span {
+        width: 100%;
+    }
+}

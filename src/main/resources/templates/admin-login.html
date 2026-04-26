@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 로그인</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="container narrow">
+    <section class="card login-card">
+        <a class="text-link" th:href="@{/}">← 홈으로</a>
+        <h1>관리자 로그인</h1>
+        <p class="subtitle">관리자는 회의실과 전체 예약을 관리할 수 있습니다.</p>
+
+        <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <form class="form-grid" th:action="@{/admin/login}" th:object="${loginForm}" method="post">
+            <label class="full-width">
+                관리자 비밀번호
+                <input type="password" th:field="*{password}" placeholder="비밀번호 입력">
+                <small class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+            </label>
+            <button class="button full-width" type="submit">로그인</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

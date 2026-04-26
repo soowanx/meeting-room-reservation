@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 예약 조회</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="page-header compact">
+    <div>
+        <a class="text-link" th:href="@{/}">← 홈으로</a>
+        <h1>내 예약 조회</h1>
+        <p class="subtitle">이메일 기준으로 예약 내역을 확인하고 취소할 수 있습니다.</p>
+    </div>
+</header>
+
+<main class="container">
+    <section class="card">
+        <form class="inline-form" method="get" th:action="@{/reservations/my}">
+            <input type="email" name="email" th:value="${email}" placeholder="예약에 사용한 이메일">
+            <button class="button" type="submit">조회</button>
+        </form>
+
+        <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    </section>
+
+    <section class="card" th:if="${email}">
+        <h2 th:text="'조회 결과: ' + ${email}">조회 결과</h2>
+
+        <div th:if="${#lists.isEmpty(reservations)}" class="empty-state">
+            예약 내역이 없습니다.
+        </div>
+
+        <div class="reservation-table" th:unless="${#lists.isEmpty(reservations)}">
+            <div class="reservation-row header">
+                <span>회의실</span>
+                <span>목적</span>
+                <span>시간</span>
+                <span>상태</span>
+                <span>관리</span>
+            </div>
+            <div class="reservation-row" th:each="reservation : ${reservations}">
+                <span th:text="${reservation.room.name}">Ocean</span>
+                <span th:text="${reservation.purpose}">회의</span>
+                <span th:text="${#temporals.format(reservation.startAt, 'yyyy-MM-dd HH:mm')} + ' - ' + ${#temporals.format(reservation.endAt, 'HH:mm')}">시간</span>
+                <span>
+                    <span class="badge secondary" th:if="${reservation.status.name() == 'CANCELED'}">취소됨</span>
+                    <span class="badge" th:unless="${reservation.status.name() == 'CANCELED'}">예약 완료</span>
+                </span>
+                <span>
+                    <form th:if="${reservation.status.name() == 'CONFIRMED'}" th:action="@{/reservations/{id}/cancel(id=${reservation.id})}" method="post">
+                        <input type="hidden" name="email" th:value="${email}">
+                        <button class="button danger small" type="submit">취소</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

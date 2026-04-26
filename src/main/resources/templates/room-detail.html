@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${room.name} + ' 예약'">회의실 예약</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="page-header compact">
+    <div>
+        <a class="text-link" th:href="@{/}">← 회의실 목록</a>
+        <h1 th:text="${room.name}">Ocean</h1>
+        <p class="subtitle" th:text="${room.location} + ' · 정원 ' + ${room.capacity} + '명'">위치</p>
+    </div>
+    <a class="text-link" th:href="@{/reservations/my}">내 예약 조회</a>
+</header>
+
+<main class="container split-layout">
+    <section class="card">
+        <h2>예약하기</h2>
+        <p class="muted" th:text="${room.description}">설명</p>
+
+        <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <form class="form-grid" th:action="@{/rooms/{id}/reservations(id=${room.id})}" th:object="${reservationForm}" method="post">
+            <label>
+                예약자 이름
+                <input type="text" th:field="*{reserverName}" placeholder="홍길동">
+                <small class="field-error" th:if="${#fields.hasErrors('reserverName')}" th:errors="*{reserverName}"></small>
+            </label>
+
+            <label>
+                예약자 이메일
+                <input type="email" th:field="*{reserverEmail}" placeholder="you@example.com">
+                <small class="field-error" th:if="${#fields.hasErrors('reserverEmail')}" th:errors="*{reserverEmail}"></small>
+            </label>
+
+            <label>
+                시작 시간
+                <input type="datetime-local" th:field="*{startAt}">
+                <small class="field-error" th:if="${#fields.hasErrors('startAt')}" th:errors="*{startAt}"></small>
+            </label>
+
+            <label>
+                종료 시간
+                <input type="datetime-local" th:field="*{endAt}">
+                <small class="field-error" th:if="${#fields.hasErrors('endAt')}" th:errors="*{endAt}"></small>
+            </label>
+
+            <label class="full-width">
+                사용 목적
+                <textarea th:field="*{purpose}" rows="4" placeholder="예: 주간 스프린트 리뷰"></textarea>
+                <small class="field-error" th:if="${#fields.hasErrors('purpose')}" th:errors="*{purpose}"></small>
+            </label>
+
+            <button class="button full-width" type="submit">예약 등록</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>예정된 예약</h2>
+        <div th:if="${#lists.isEmpty(upcomingReservations)}" class="empty-state">
+            아직 예약이 없습니다.
+        </div>
+
+        <div class="schedule-list" th:unless="${#lists.isEmpty(upcomingReservations)}">
+            <article class="schedule-item" th:each="reservation : ${upcomingReservations}">
+                <div>
+                    <strong th:text="${reservation.purpose}">주간 회의</strong>
+                    <p class="muted" th:text="${reservation.reserverName} + ' · ' + ${reservation.reserverEmail}">예약자</p>
+                </div>
+                <p th:text="${#temporals.format(reservation.startAt, 'yyyy-MM-dd HH:mm')} + ' - ' + ${#temporals.format(reservation.endAt, 'HH:mm')}">시간</p>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>

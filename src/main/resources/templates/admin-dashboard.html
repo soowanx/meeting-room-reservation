@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="page-header compact">
+    <div>
+        <a class="text-link" th:href="@{/}">← 홈으로</a>
+        <h1>관리자 대시보드</h1>
+        <p class="subtitle">회의실과 전체 예약을 한 화면에서 관리합니다.</p>
+    </div>
+    <form th:action="@{/admin/logout}" method="post">
+        <button class="button secondary" type="submit">로그아웃</button>
+    </form>
+</header>
+
+<main class="container admin-layout">
+    <section class="card">
+        <h2>회의실 등록</h2>
+
+        <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <form class="form-grid" th:action="@{/admin/rooms}" th:object="${roomForm}" method="post">
+            <label>
+                이름
+                <input type="text" th:field="*{name}" placeholder="예: River">
+                <small class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+            </label>
+            <label>
+                위치
+                <input type="text" th:field="*{location}" placeholder="예: 10F C구역">
+                <small class="field-error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></small>
+            </label>
+            <label>
+                수용 인원
+                <input type="number" th:field="*{capacity}" min="1">
+                <small class="field-error" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></small>
+            </label>
+            <label class="full-width">
+                설명
+                <textarea th:field="*{description}" rows="3" placeholder="회의실 특징을 입력하세요."></textarea>
+                <small class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
+            </label>
+            <button class="button full-width" type="submit">회의실 등록</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>회의실 목록</h2>
+        <div class="room-list">
+            <article class="mini-card" th:each="room : ${rooms}">
+                <div>
+                    <strong th:text="${room.name}">Ocean</strong>
+                    <p class="muted" th:text="${room.location} + ' · 정원 ' + ${room.capacity} + '명'">정보</p>
+                </div>
+                <form th:action="@{/admin/rooms/{id}/toggle(id=${room.id})}" method="post">
+                    <button class="button small" th:classappend="${room.active} ? ' secondary' : ''" type="submit"
+                            th:text="${room.active} ? '비활성화' : '활성화'">비활성화</button>
+                </form>
+            </article>
+        </div>
+    </section>
+
+    <section class="card full-width">
+        <h2>전체 예약 목록</h2>
+
+        <div class="reservation-table">
+            <div class="reservation-row header admin">
+                <span>회의실</span>
+                <span>예약자</span>
+                <span>목적</span>
+                <span>시간</span>
+                <span>상태</span>
+                <span>관리</span>
+            </div>
+            <div class="reservation-row admin" th:each="reservation : ${reservations}">
+                <span th:text="${reservation.room.name}">Ocean</span>
+                <span th:text="${reservation.reserverName} + ' / ' + ${reservation.reserverEmail}">예약자</span>
+                <span th:text="${reservation.purpose}">회의</span>
+                <span th:text="${#temporals.format(reservation.startAt, 'yyyy-MM-dd HH:mm')} + ' - ' + ${#temporals.format(reservation.endAt, 'HH:mm')}">시간</span>
+                <span>
+                    <span class="badge secondary" th:if="${reservation.status.name() == 'CANCELED'}">취소됨</span>
+                    <span class="badge" th:unless="${reservation.status.name() == 'CANCELED'}">예약 완료</span>
+                </span>
+                <span>
+                    <form th:if="${reservation.status.name() == 'CONFIRMED'}" th:action="@{/admin/reservations/{id}/cancel(id=${reservation.id})}" method="post">
+                        <button class="button danger small" type="submit">취소</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
